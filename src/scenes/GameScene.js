@@ -102,7 +102,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   update(_time, delta) {
-    if (this._gameOver) return
+    if (this._gameOver || this._isFrozen) return
 
     // ── Read input ─────────────────────────────────────────────────────────
     const in1 = this._input1.getState()
@@ -145,10 +145,12 @@ export class GameScene extends Phaser.Scene {
     if (p1Hit) {
       this._hud.setPlayer2Health(this._player2.health)
       this.sound.play(ASSETS.HIT_SFX)
+      this._applyHitEffects()
     }
     if (p2Hit) {
       this._hud.setPlayer1Health(this._player1.health)
       this.sound.play(ASSETS.HIT_SFX)
+      this._applyHitEffects()
     }
 
     // ── Debug ───────────────────────────────────────────────────────────────
@@ -246,5 +248,19 @@ export class GameScene extends Phaser.Scene {
 
     drawFighter(this._player1, 0xff0000)
     drawFighter(this._player2, 0x0000ff)
+  }
+
+  _applyHitEffects() {
+    // 1. Screen Shake
+    this.cameras.main.shake(150, 0.01)
+
+    // 2. Hit Freeze (Briefly stop animations and movement)
+    this.anims.pauseAll()
+    this._isFrozen = true
+
+    this.time.delayedCall(80, () => {
+      this.anims.resumeAll()
+      this._isFrozen = false
+    })
   }
 }
