@@ -22,6 +22,7 @@ import {
   CANVAS_HEIGHT,
   INITIAL_HEALTH,
   FIGHTER_STATE,
+  ASSETS,
 } from '../constants/GameConstants.js'
 
 export class Fighter extends Phaser.GameObjects.Sprite {
@@ -98,6 +99,7 @@ export class Fighter extends Phaser.GameObjects.Sprite {
     if (this.isDead || this.isAttacking) return
     this.isAttacking = true
     this._setState(FIGHTER_STATE.ATTACK, true)
+    this.scene.sound.play(ASSETS.SWING_SFX)
   }
 
   /** Called by CombatSystem when this fighter is hit. */

@@ -58,6 +58,11 @@ export const ASSETS = {
   KENJI_ATTACK1: 'kenji_attack1',
   KENJI_TAKEHIT: 'kenji_takehit',
   KENJI_DEATH:   'kenji_death',
+
+  // Audio
+  MUSIC:         'music',
+  SWING_SFX:     'swing_sfx',
+  HIT_SFX:       'hit_sfx',
 }
 
 // Fighter state enum — values MUST match asset key suffixes (e.g. 'mack_attack1')

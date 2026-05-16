@@ -89,6 +89,9 @@ export class GameScene extends Phaser.Scene {
       ()          => this._endGame(),
     )
 
+    // ── Audio ──────────────────────────────────────────────────────────────
+    this.sound.play(ASSETS.MUSIC, { loop: true, volume: 0.5 })
+
     // ── Camera fade-in ─────────────────────────────────────────────────────
     this.cameras.main.fadeIn(400)
   }
@@ -129,8 +132,14 @@ export class GameScene extends Phaser.Scene {
     // ── Combat ────────────────────────────────────────────────────────────
     const { p1Hit, p2Hit } = CombatSystem.update(this._player1, this._player2)
 
-    if (p1Hit) this._hud.setPlayer2Health(this._player2.health)
-    if (p2Hit) this._hud.setPlayer1Health(this._player1.health)
+    if (p1Hit) {
+      this._hud.setPlayer2Health(this._player2.health)
+      this.sound.play(ASSETS.HIT_SFX)
+    }
+    if (p2Hit) {
+      this._hud.setPlayer1Health(this._player1.health)
+      this.sound.play(ASSETS.HIT_SFX)
+    }
 
     // ── Check game-over via health ─────────────────────────────────────────
     if (this._player1.health <= 0 || this._player2.health <= 0) {
@@ -176,6 +185,7 @@ export class GameScene extends Phaser.Scene {
   _restartGame() {
     this._input1.destroy()
     this._input2.destroy()
+    this.sound.stopAll()
     document.getElementById('game-over-overlay').classList.remove('visible')
     this.cameras.main.fadeOut(300, 0, 0, 0)
     this.cameras.main.once('camerafadeoutcomplete', () => {
