@@ -19,25 +19,25 @@ export class BootScene extends Phaser.Scene {
     this._createLoadingBar()
 
     // ── Background / decoration images ────────────────────────────────────
-    this.load.image(ASSETS.BACKGROUND, 'img/background.png')
-    this.load.spritesheet(ASSETS.SHOP, 'img/shop.png', {
-      frameWidth:  118,
-      frameHeight: 128,
+    this.load.image(ASSETS.BACKGROUND, 'assets/img/background.png')
+    this.load.spritesheet(ASSETS.SHOP, 'assets/img/shop.png', {
+      frameWidth: 118,
+      frameHeight: 128
     })
 
     // ── SamuraiMack spritesheets ───────────────────────────────────────────
     for (const sheet of MACK_SPRITESHEETS) {
       this.load.spritesheet(sheet.key, sheet.path, {
-        frameWidth:  sheet.frameW,
-        frameHeight: sheet.frameH,
+        frameWidth: sheet.frameW,
+        frameHeight: sheet.frameH
       })
     }
 
     // ── Kenji spritesheets ─────────────────────────────────────────────────
     for (const sheet of KENJI_SPRITESHEETS) {
       this.load.spritesheet(sheet.key, sheet.path, {
-        frameWidth:  sheet.frameW,
-        frameHeight: sheet.frameH,
+        frameWidth: sheet.frameW,
+        frameHeight: sheet.frameH
       })
     }
 
@@ -68,18 +68,22 @@ export class BootScene extends Phaser.Scene {
     this.add.rectangle(width / 2, height / 2, width, height, 0x0a0a0a)
 
     // Title
-    this.add.text(width / 2, height / 2 - 80, 'SAMURAI DUEL', {
-      fontFamily: "'Press Start 2P'",
-      fontSize:   '28px',
-      color:      '#818cf8',
-    }).setOrigin(0.5)
+    this.add
+      .text(width / 2, height / 2 - 80, 'SAMURAI DUEL', {
+        fontFamily: "'Press Start 2P'",
+        fontSize: '28px',
+        color: '#818cf8'
+      })
+      .setOrigin(0.5)
 
     // Loading text
-    this._loadText = this.add.text(width / 2, height / 2 + 40, 'Loading...', {
-      fontFamily: "'Press Start 2P'",
-      fontSize:   '10px',
-      color:      '#94a3b8',
-    }).setOrigin(0.5)
+    this._loadText = this.add
+      .text(width / 2, height / 2 + 40, 'Loading...', {
+        fontFamily: "'Press Start 2P'",
+        fontSize: '10px',
+        color: '#94a3b8'
+      })
+      .setOrigin(0.5)
 
     // Bar container
     this._barContainer = this.add.graphics()
