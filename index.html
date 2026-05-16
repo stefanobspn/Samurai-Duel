@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A 2D fighting game featuring Samurai Mack vs Kenji. Play locally with a friend!" />
+    <title>Samurai Duel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html, body {
+        width: 100%;
+        height: 100%;
+        background-color: #0a0a0a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        font-family: 'Press Start 2P', cursive;
+      }
+
+      #game-container {
+        position: relative;
+      }
+
+      /* HUD overlay sits above the Phaser canvas */
+      #hud {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        pointer-events: none;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        padding: 16px 20px;
+        gap: 12px;
+      }
+
+      /* Health bar wrapper */
+      .health-bar-wrap {
+        position: relative;
+        flex: 1;
+        height: 30px;
+        background-color: #7f1d1d;
+        border: 3px solid #fff;
+      }
+
+      #player1-health-bar .health-fill {
+        position: absolute;
+        top: 0; right: 0; bottom: 0;
+        left: 0;
+        background: linear-gradient(90deg, #818cf8, #6366f1);
+        transition: width 0.25s ease;
+        transform-origin: right center;
+      }
+
+      #player2-health-bar {
+        border-left: none;
+      }
+
+      #player2-health-bar .health-fill {
+        position: absolute;
+        top: 0; right: 0; bottom: 0;
+        left: 0;
+        background: linear-gradient(270deg, #818cf8, #6366f1);
+        transition: width 0.25s ease;
+        transform-origin: left center;
+      }
+
+      /* Player labels */
+      .health-label {
+        position: absolute;
+        top: -18px;
+        font-size: 7px;
+        color: #e2e8f0;
+        white-space: nowrap;
+        text-shadow: 1px 1px 0 #000;
+      }
+
+      #player1-health-bar .health-label { left: 0; }
+      #player2-health-bar .health-label { right: 0; }
+
+      /* Timer */
+      #timer {
+        flex-shrink: 0;
+        width: 64px;
+        height: 48px;
+        background: #000;
+        border: 3px solid #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 20px;
+        font-family: 'Press Start 2P', cursive;
+        line-height: 1;
+      }
+
+      #timer.urgent {
+        color: #ef4444;
+        animation: pulse-timer 0.5s infinite alternate;
+      }
+
+      @keyframes pulse-timer {
+        from { transform: scale(1); }
+        to   { transform: scale(1.15); }
+      }
+
+      /* Game-over overlay */
+      #game-over-overlay {
+        display: none;
+        position: absolute;
+        inset: 0;
+        z-index: 20;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 24px;
+        background: rgba(0,0,0,0.7);
+        backdrop-filter: blur(4px);
+      }
+
+      #game-over-overlay.visible {
+        display: flex;
+        animation: fade-in 0.4s ease;
+      }
+
+      @keyframes fade-in {
+        from { opacity: 0; transform: scale(0.9); }
+        to   { opacity: 1; transform: scale(1); }
+      }
+
+      #result-text {
+        font-size: 28px;
+        color: #fff;
+        text-align: center;
+        text-shadow: 0 0 20px #818cf8, 2px 2px 0 #000;
+        letter-spacing: 2px;
+      }
+
+      #restart-btn {
+        font-family: 'Press Start 2P', cursive;
+        font-size: 11px;
+        padding: 14px 28px;
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        color: #fff;
+        border: 3px solid #fff;
+        cursor: pointer;
+        pointer-events: all;
+        transition: transform 0.15s, box-shadow 0.15s;
+        box-shadow: 0 0 20px rgba(129,140,248,0.4);
+        letter-spacing: 1px;
+      }
+
+      #restart-btn:hover {
+        transform: scale(1.06);
+        box-shadow: 0 0 30px rgba(129,140,248,0.7);
+      }
+
+      #restart-btn:active {
+        transform: scale(0.97);
+      }
+
+      /* Controls hint */
+      #controls-hint {
+        position: absolute;
+        bottom: 8px;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      .controls-text {
+        font-size: 6px;
+        color: rgba(255,255,255,0.4);
+        font-family: 'Press Start 2P', cursive;
+        text-shadow: 1px 1px 0 #000;
+        line-height: 1.8;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game-container">
+      <!-- HUD: health bars + timer -->
+      <div id="hud">
+        <div id="player1-health-bar" class="health-bar-wrap">
+          <span class="health-label">P1</span>
+          <div class="health-fill" id="p1-fill" style="width:100%"></div>
+        </div>
+
+        <div id="timer">60</div>
+
+        <div id="player2-health-bar" class="health-bar-wrap">
+          <span class="health-label">P2</span>
+          <div class="health-fill" id="p2-fill" style="width:100%"></div>
+        </div>
+      </div>
+
+      <!-- Game-over overlay -->
+      <div id="game-over-overlay">
+        <div id="result-text">TIE</div>
+        <button id="restart-btn" onclick="window.gameInstance && window.gameInstance.restart()">
+          ▶ PLAY AGAIN
+        </button>
+      </div>
+
+      <!-- Controls hint -->
+      <div id="controls-hint">
+        <div class="controls-text">
+          P1: A/D Move<br>W Jump<br>SPACE Attack
+        </div>
+        <div class="controls-text" style="text-align:right">
+          P2: ←/→ Move<br>↑ Jump<br>↓ Attack
+        </div>
+      </div>
+
+      <!-- Phaser mounts here -->
+      <div id="phaser-canvas"></div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
