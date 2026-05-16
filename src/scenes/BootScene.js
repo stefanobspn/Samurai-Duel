@@ -45,6 +45,8 @@ export class BootScene extends Phaser.Scene {
     this.load.audio(ASSETS.MUSIC, 'assets/audio/music.mp3')
     this.load.audio(ASSETS.SWING_SFX, 'assets/audio/SoundEffect/swing.wav')
     this.load.audio(ASSETS.HIT_SFX, 'assets/audio/SoundEffect/hit1.mp3')
+    this.load.audio(ASSETS.BLOCK1_SFX, 'assets/audio/SoundEffect/block1.mp3')
+    this.load.audio(ASSETS.BLOCK2_SFX, 'assets/audio/SoundEffect/block2.mp3')
 
     // Progress bar
     this.load.on('progress', (value) => {

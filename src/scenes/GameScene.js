@@ -12,7 +12,7 @@
  * timer logic in TimerSystem, display in HUD.
  */
 
-import { SCENES, ASSETS, CANVAS_WIDTH, CANVAS_HEIGHT, GAME_DURATION } from '../constants/GameConstants.js'
+import { SCENES, ASSETS, CANVAS_WIDTH, CANVAS_HEIGHT, GAME_DURATION, DEBUG_HITBOXES } from '../constants/GameConstants.js'
 import { InputSystem, INPUT_MAPS } from '../systems/InputSystem.js'
 import { CombatSystem }             from '../systems/CombatSystem.js'
 import { TimerSystem }              from '../systems/TimerSystem.js'
@@ -89,6 +89,11 @@ export class GameScene extends Phaser.Scene {
       ()          => this._endGame(),
     )
 
+    // ── Debug ───────────────────────────────────────────────────────────────
+    if (DEBUG_HITBOXES) {
+      this._debugGraphics = this.add.graphics().setDepth(10)
+    }
+
     // ── Audio ──────────────────────────────────────────────────────────────
     this.sound.play(ASSETS.MUSIC, { loop: true, volume: 0.5 })
 
@@ -130,7 +135,12 @@ export class GameScene extends Phaser.Scene {
     // (handled inside Fighter.getHitbox via _facingRight)
 
     // ── Combat ────────────────────────────────────────────────────────────
-    const { p1Hit, p2Hit } = CombatSystem.update(this._player1, this._player2)
+    const { p1Hit, p2Hit, blocked } = CombatSystem.update(this._player1, this._player2)
+
+    if (blocked) {
+      const blockKey = Math.random() > 0.5 ? ASSETS.BLOCK1_SFX : ASSETS.BLOCK2_SFX
+      this.sound.play(blockKey)
+    }
 
     if (p1Hit) {
       this._hud.setPlayer2Health(this._player2.health)
@@ -139,6 +149,11 @@ export class GameScene extends Phaser.Scene {
     if (p2Hit) {
       this._hud.setPlayer1Health(this._player1.health)
       this.sound.play(ASSETS.HIT_SFX)
+    }
+
+    // ── Debug ───────────────────────────────────────────────────────────────
+    if (DEBUG_HITBOXES && this._debugGraphics) {
+      this._drawDebug()
     }
 
     // ── Check game-over via health ─────────────────────────────────────────
@@ -210,5 +225,26 @@ export class GameScene extends Phaser.Scene {
 
     register(MACK_ANIMATIONS,  'mack')
     register(KENJI_ANIMATIONS, 'kenji')
+  }
+
+  _drawDebug() {
+    this._debugGraphics.clear()
+
+    const drawFighter = (f, color) => {
+      // Hurtbox (Green)
+      const hurt = f.getHurtbox()
+      this._debugGraphics.lineStyle(2, 0x00ff00)
+      this._debugGraphics.strokeRect(hurt.x, hurt.y, hurt.width, hurt.height)
+
+      // Hitbox (Red/Yellow)
+      if (f.isAttacking) {
+        const hit = f.getHitbox()
+        this._debugGraphics.lineStyle(2, 0xff0000)
+        this._debugGraphics.strokeRect(hit.x, hit.y, hit.width, hit.height)
+      }
+    }
+
+    drawFighter(this._player1, 0xff0000)
+    drawFighter(this._player2, 0x0000ff)
   }
 }

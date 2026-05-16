@@ -28,6 +28,12 @@ export const INITIAL_HEALTH   = 100
 export const P1_ATTACK_FRAME  = 4
 export const P2_ATTACK_FRAME  = 2
 
+// Blocking window — how many frames before/after the attack frame can trigger a block
+export const BLOCK_WINDOW     = 2
+
+// Debugging
+export const DEBUG_HITBOXES   = true
+
 // Scene keys (avoid typos)
 export const SCENES = {
   BOOT:     'BootScene',
@@ -63,6 +69,8 @@ export const ASSETS = {
   MUSIC:         'music',
   SWING_SFX:     'swing_sfx',
   HIT_SFX:       'hit_sfx',
+  BLOCK1_SFX:    'block1_sfx',
+  BLOCK2_SFX:    'block2_sfx',
 }
 
 // Fighter state enum — values MUST match asset key suffixes (e.g. 'mack_attack1')
