@@ -31,7 +31,9 @@ export class GameScene extends Phaser.Scene {
     document.getElementById('controls-hint').style.display = 'flex'
     document.getElementById('game-over-overlay').classList.remove('visible')
 
-    this._gameOver = false
+    this._gameOver               = false
+    this._isFrozen               = false
+    this._gamepadRestartCallback = null
 
     // ── Background ─────────────────────────────────────────────────────────
     this.add.image(0, 0, ASSETS.BACKGROUND).setOrigin(0, 0)
@@ -73,8 +75,14 @@ export class GameScene extends Phaser.Scene {
     this._player2.setDepth(2)
 
     // ── Input ──────────────────────────────────────────────────────────────
-    this._input1 = new InputSystem(this, INPUT_MAPS.PLAYER1)
-    this._input2 = new InputSystem(this, INPUT_MAPS.PLAYER2)
+    // Enable gamepad support (Phaser needs this flag active in the scene)
+    this.input.gamepad.once('connected', pad => {
+      console.log(`[Gamepad] Connected: ${pad.id} (index ${pad.index})`)
+    })
+
+    // P1 → gamepad slot 0 (first connected pad), P2 → slot 1 (second pad)
+    this._input1 = new InputSystem(this, INPUT_MAPS.PLAYER1, { gamepadIndex: 0 })
+    this._input2 = new InputSystem(this, INPUT_MAPS.PLAYER2, { gamepadIndex: 1 })
 
     // ── HUD ────────────────────────────────────────────────────────────────
     this._hud = new HUD()
@@ -192,17 +200,36 @@ export class GameScene extends Phaser.Scene {
       document.getElementById('result-text').textContent = result
       overlay.classList.add('visible')
 
-      // Wire restart button
+      // Wire restart button (mouse / keyboard)
       document.getElementById('restart-btn').onclick = () => {
         this._restartGame()
       }
+
+      // Gamepad: press △ (Triangle, index 3) to play again
+      // Store the callback so we can cleanly remove it — events.on() returns
+      // the EventEmitter itself, NOT a removable handle, so we must use off().
+      let prevPressed = true  // start as true so we wait for a fresh press
+      this._gamepadRestartCallback = () => {
+        const pads = this.input.gamepad?.gamepads?.filter(p => p && p.connected) ?? []
+        const pressed = pads.some(p => p.buttons[3]?.pressed)
+        if (pressed && !prevPressed) this._restartGame()
+        prevPressed = pressed
+      }
+      this.events.on('update', this._gamepadRestartCallback)
     })
   }
 
   _restartGame() {
     this._input1.destroy()
     this._input2.destroy()
+    // Remove only the gamepad restart callback — NOT the whole EventEmitter
+    if (this._gamepadRestartCallback) {
+      this.events.off('update', this._gamepadRestartCallback)
+      this._gamepadRestartCallback = null
+    }
     this.sound.stopAll()
+    // Resume animations in case a hit-freeze (pauseAll) was active
+    this.anims.resumeAll()
     document.getElementById('game-over-overlay').classList.remove('visible')
     this.cameras.main.fadeOut(300, 0, 0, 0)
     this.cameras.main.once('camerafadeoutcomplete', () => {

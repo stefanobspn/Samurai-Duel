@@ -21,7 +21,7 @@ export const FIGHTER_SCALE = 2.5
 export const FRAME_RATE    = 12   // default animation fps
 
 // Combat
-export const HIT_DAMAGE       = 20   // HP per successful hit
+export const HIT_DAMAGE       = 10   // HP per successful hit
 export const INITIAL_HEALTH   = 100
 
 // Hitbox attack window — the frame index at which the hit registers

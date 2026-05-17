@@ -90,16 +90,19 @@ export class MenuScene extends Phaser.Scene {
       'A / D   →  Move',
       'W       →  Jump',
       'SPACE   →  Attack',
+      '🎮  L.Stick → Move/Jump',
+      '🎮  × Button → Attack',
     ], '#818cf8')
 
     this._drawPanel(panelX + 220, panelY, 'PLAYER 2', [
       '← / →   →  Move',
       '↑       →  Jump',
       '↓       →  Attack',
+      '🎮  2nd gamepad',
     ], '#f472b6')
 
     // ── Press ENTER ────────────────────────────────────────────────────────
-    const pressEnter = this.add.text(width / 2, 470, '▶  PRESS ENTER TO FIGHT', {
+    const pressEnter = this.add.text(width / 2, 470, '▶  PRESS ENTER / 🎮 △ TO FIGHT', {
       fontFamily: "'Press Start 2P'",
       fontSize:   '12px',
       color:      '#fff',
@@ -122,19 +125,27 @@ export class MenuScene extends Phaser.Scene {
     }).setOrigin(1, 1)
 
     // ── Input ──────────────────────────────────────────────────────────────
-    this.input.keyboard.once('keydown-ENTER', () => {
+    const startGame = () => {
+      if (this._started) return
+      this._started = true
       this.cameras.main.fadeOut(400, 0, 0, 0)
       this.cameras.main.once('camerafadeoutcomplete', () => {
         this.scene.start(SCENES.GAME)
       })
-    })
+    }
 
-    // Also allow space or any key
-    this.input.keyboard.once('keydown-SPACE', () => {
-      this.cameras.main.fadeOut(400, 0, 0, 0)
-      this.cameras.main.once('camerafadeoutcomplete', () => {
-        this.scene.start(SCENES.GAME)
-      })
+    this.input.keyboard.once('keydown-ENTER', startGame)
+    this.input.keyboard.once('keydown-SPACE', startGame)
+
+    // Gamepad: poll each frame for △ (Triangle, index 3) or Start (index 9) button
+    this._prevAnyButton = false
+    this.events.on('update', () => {
+      const pads = this.input.gamepad?.gamepads?.filter(p => p && p.connected) ?? []
+      const anyPressed = pads.some(
+        p => p.buttons[3]?.pressed || p.buttons[9]?.pressed
+      )
+      if (anyPressed && !this._prevAnyButton) startGame()
+      this._prevAnyButton = anyPressed
     })
 
     this.cameras.main.fadeIn(500)

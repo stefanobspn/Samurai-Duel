@@ -18,6 +18,10 @@ const config = {
   parent: 'phaser-canvas', // mount into this DOM element
   backgroundColor: '#0a0a0a',
 
+  input: {
+    gamepad: true,         // Enable Phaser's Gamepad API
+  },
+
   physics: {
     default: 'arcade',
     arcade: {
@@ -49,5 +53,33 @@ window.gameInstance = {
     }
   },
 }
+
+// ── Audio unlock ───────────────────────────────────────────────────────────
+// The browser blocks AudioContext until a real user gesture (click / keydown).
+// The #audio-unlock overlay intercepts the first such gesture, resumes the
+// AudioContext, then removes itself so the game can proceed normally.
+const unlockOverlay = document.getElementById('audio-unlock')
+
+const unlockAudio = () => {
+  // Resume Phaser's WebAudio context
+  const ctx = game.sound?.context
+  if (ctx && ctx.state === 'suspended') {
+    ctx.resume()
+  }
+
+  // Hide overlay with a quick fade
+  if (unlockOverlay) {
+    unlockOverlay.style.transition = 'opacity 0.25s'
+    unlockOverlay.style.opacity   = '0'
+    setTimeout(() => unlockOverlay.classList.add('hidden'), 260)
+  }
+
+  // Remove listeners — only needs to fire once
+  document.removeEventListener('click',   unlockAudio)
+  document.removeEventListener('keydown', unlockAudio)
+}
+
+document.addEventListener('click',   unlockAudio)
+document.addEventListener('keydown', unlockAudio)
 
 export default game

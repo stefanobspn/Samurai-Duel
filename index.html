@@ -189,6 +189,59 @@
         text-shadow: 1px 1px 0 #000;
         line-height: 1.8;
       }
+      /* ── Audio unlock overlay ─────────────────────────────────────────────
+         Browser requires a real user gesture before AudioContext can start.
+         This overlay intercepts the very first click/keydown, unlocks audio,
+         then removes itself instantly — no extra "start screen" feel.
+      ──────────────────────────────────────────────────────────────────────── */
+      #audio-unlock {
+        position: absolute;
+        inset: 0;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background: rgba(0, 0, 0, 0.82);
+        backdrop-filter: blur(6px);
+        cursor: pointer;
+        animation: fade-in 0.5s ease;
+      }
+
+      #audio-unlock .unlock-icon {
+        font-size: 48px;
+        animation: pulse-icon 1.4s ease-in-out infinite;
+      }
+
+      @keyframes pulse-icon {
+        0%, 100% { transform: scale(1);   opacity: 1; }
+        50%       { transform: scale(1.15); opacity: 0.7; }
+      }
+
+      #audio-unlock .unlock-title {
+        font-family: 'Press Start 2P', cursive;
+        font-size: 22px;
+        color: #e2e8f0;
+        text-shadow: 0 0 20px #818cf8, 2px 2px 0 #000;
+        letter-spacing: 2px;
+      }
+
+      #audio-unlock .unlock-sub {
+        font-family: 'Press Start 2P', cursive;
+        font-size: 9px;
+        color: #94a3b8;
+        animation: blink 0.9s step-start infinite;
+      }
+
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50%       { opacity: 0; }
+      }
+
+      #audio-unlock.hidden {
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -218,11 +271,18 @@
 
       <div id="controls-hint">
         <div class="controls-text">
-          P1: A/D Move | W Jump<br>SPACE Attack
+          P1: A/D Move | W Jump | SPACE Attack<br>🎮 L.Stick Move/Jump | × Attack
         </div>
         <div class="controls-text" style="text-align:right">
-          P2: ←/→ Move | ↑ Jump<br>↓ Attack
+          P2: ←/→ Move | ↑ Jump | ↓ Attack<br>🎮 2nd gamepad (same layout)
         </div>
+      </div>
+
+      <!-- Audio unlock overlay (dismissed by first click or keypress) -->
+      <div id="audio-unlock">
+        <div class="unlock-icon">🔊</div>
+        <div class="unlock-title">SAMURAI DUEL</div>
+        <div class="unlock-sub">CLICK OR PRESS ANY KEY TO START</div>
       </div>
 
       <!-- Phaser mounts here -->
