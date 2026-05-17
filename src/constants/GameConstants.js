@@ -25,7 +25,7 @@ export const HIT_DAMAGE       = 10   // HP per successful hit
 export const INITIAL_HEALTH   = 100
 
 // Hitbox attack window — the frame index at which the hit registers
-export const P1_ATTACK_FRAME  = 4
+export const P1_ATTACK_FRAME  = 2
 export const P2_ATTACK_FRAME  = 2
 
 // Blocking window — how many frames before/after the attack frame can trigger a block

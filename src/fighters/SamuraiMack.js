@@ -92,8 +92,8 @@ export function createSamuraiMack(scene) {
     texturePrefix: 'mack',
     facingRight: true,
     scale: FIGHTER_SCALE,
-    // Hitbox: attack box extending to the right
-    hitboxOffset: { x: 100, y: -120, w: 160, h: 50 },
+    // Hitbox: attack box extending to the right (x:0 = starts at sprite center, same as Kenji)
+    hitboxOffset: { x: 0, y: -120, w: 170, h: 50 },
     // Hurtbox: fighter body
     hurtboxSize: { w: 50, h: 120 }
   })
