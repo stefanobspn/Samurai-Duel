@@ -32,7 +32,7 @@ export const P2_ATTACK_FRAME  = 2
 export const BLOCK_WINDOW     = 2
 
 // Debugging
-export const DEBUG_HITBOXES   = true
+export const DEBUG_HITBOXES   = false
 
 // Scene keys (avoid typos)
 export const SCENES = {
