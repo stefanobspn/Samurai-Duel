@@ -12,6 +12,7 @@ import {
   GROUND_Y
 } from '../constants/GameConstants.js'
 import { Fighter } from './Fighter.js'
+import { assetUrl } from '../utils/assetUrl.js'
 
 const FRAME_W = 200
 const FRAME_H = 200
@@ -29,43 +30,43 @@ export const KENJI_ANIMATIONS = [
 export const KENJI_SPRITESHEETS = [
   {
     key: ASSETS.KENJI_IDLE,
-    path: 'assets/img/kenji/Idle.png',
+    path: assetUrl('img/kenji/Idle.png'),
     frameW: FRAME_W,
     frameH: FRAME_H
   },
   {
     key: ASSETS.KENJI_RUN,
-    path: 'assets/img/kenji/Run.png',
+    path: assetUrl('img/kenji/Run.png'),
     frameW: FRAME_W,
     frameH: FRAME_H
   },
   {
     key: ASSETS.KENJI_JUMP,
-    path: 'assets/img/kenji/Jump.png',
+    path: assetUrl('img/kenji/Jump.png'),
     frameW: FRAME_W,
     frameH: FRAME_H
   },
   {
     key: ASSETS.KENJI_FALL,
-    path: 'assets/img/kenji/Fall.png',
+    path: assetUrl('img/kenji/Fall.png'),
     frameW: FRAME_W,
     frameH: FRAME_H
   },
   {
     key: ASSETS.KENJI_ATTACK1,
-    path: 'assets/img/kenji/Attack1.png',
+    path: assetUrl('img/kenji/Attack1.png'),
     frameW: FRAME_W,
     frameH: FRAME_H
   },
   {
     key: ASSETS.KENJI_TAKEHIT,
-    path: 'assets/img/kenji/Take hit.png',
+    path: assetUrl('img/kenji/Take hit.png'),
     frameW: FRAME_W,
     frameH: FRAME_H
   },
   {
     key: ASSETS.KENJI_DEATH,
-    path: 'assets/img/kenji/Death.png',
+    path: assetUrl('img/kenji/Death.png'),
     frameW: FRAME_W,
     frameH: FRAME_H
   }

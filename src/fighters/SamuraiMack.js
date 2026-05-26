@@ -17,6 +17,7 @@ import {
   GROUND_Y
 } from '../constants/GameConstants.js'
 import { Fighter } from './Fighter.js'
+import { assetUrl } from '../utils/assetUrl.js'
 
 // ── Sprite frame dimensions (pixels per frame in each sheet) ─────────────────
 const FRAME_W = 200
@@ -37,43 +38,43 @@ export const MACK_ANIMATIONS = [
 export const MACK_SPRITESHEETS = [
   {
     key: ASSETS.MACK_IDLE,
-    path: 'assets/img/samuraiMack/Idle.png',
+    path: assetUrl('img/samuraiMack/Idle.png'),
     frameW: FRAME_W,
     frameH: FRAME_H
   },
   {
     key: ASSETS.MACK_RUN,
-    path: 'assets/img/samuraiMack/Run.png',
+    path: assetUrl('img/samuraiMack/Run.png'),
     frameW: FRAME_W,
     frameH: FRAME_H
   },
   {
     key: ASSETS.MACK_JUMP,
-    path: 'assets/img/samuraiMack/Jump.png',
+    path: assetUrl('img/samuraiMack/Jump.png'),
     frameW: FRAME_W,
     frameH: FRAME_H
   },
   {
     key: ASSETS.MACK_FALL,
-    path: 'assets/img/samuraiMack/Fall.png',
+    path: assetUrl('img/samuraiMack/Fall.png'),
     frameW: FRAME_W,
     frameH: FRAME_H
   },
   {
     key: ASSETS.MACK_ATTACK1,
-    path: 'assets/img/samuraiMack/Attack1.png',
+    path: assetUrl('img/samuraiMack/Attack1.png'),
     frameW: FRAME_W,
     frameH: FRAME_H
   },
   {
     key: ASSETS.MACK_TAKEHIT,
-    path: 'assets/img/samuraiMack/Take Hit - white silhouette.png',
+    path: assetUrl('img/samuraiMack/Take Hit - white silhouette.png'),
     frameW: FRAME_W,
     frameH: FRAME_H
   },
   {
     key: ASSETS.MACK_DEATH,
-    path: 'assets/img/samuraiMack/Death.png',
+    path: assetUrl('img/samuraiMack/Death.png'),
     frameW: FRAME_W,
     frameH: FRAME_H
   }

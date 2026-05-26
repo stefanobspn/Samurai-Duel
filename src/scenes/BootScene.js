@@ -9,6 +9,7 @@
 import { SCENES, ASSETS } from '../constants/GameConstants.js'
 import { MACK_SPRITESHEETS } from '../fighters/SamuraiMack.js'
 import { KENJI_SPRITESHEETS } from '../fighters/Kenji.js'
+import { assetUrl } from '../utils/assetUrl.js'
 
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -19,8 +20,8 @@ export class BootScene extends Phaser.Scene {
     this._createLoadingBar()
 
     // ── Background / decoration images ────────────────────────────────────
-    this.load.image(ASSETS.BACKGROUND, 'assets/img/background.png')
-    this.load.spritesheet(ASSETS.SHOP, 'assets/img/shop.png', {
+    this.load.image(ASSETS.BACKGROUND, assetUrl('img/background.png'))
+    this.load.spritesheet(ASSETS.SHOP, assetUrl('img/shop.png'), {
       frameWidth: 118,
       frameHeight: 128
     })
@@ -42,11 +43,11 @@ export class BootScene extends Phaser.Scene {
     }
 
     // ── Audio ──────────────────────────────────────────────────────────────
-    this.load.audio(ASSETS.MUSIC, 'assets/audio/music.mp3')
-    this.load.audio(ASSETS.SWING_SFX, 'assets/audio/SoundEffect/swing.wav')
-    this.load.audio(ASSETS.HIT_SFX, 'assets/audio/SoundEffect/hit1.mp3')
-    this.load.audio(ASSETS.BLOCK1_SFX, 'assets/audio/SoundEffect/block1.mp3')
-    this.load.audio(ASSETS.BLOCK2_SFX, 'assets/audio/SoundEffect/block2.mp3')
+    this.load.audio(ASSETS.MUSIC, assetUrl('audio/music.mp3'))
+    this.load.audio(ASSETS.SWING_SFX, assetUrl('audio/SoundEffect/swing.wav'))
+    this.load.audio(ASSETS.HIT_SFX, assetUrl('audio/SoundEffect/hit1.mp3'))
+    this.load.audio(ASSETS.BLOCK1_SFX, assetUrl('audio/SoundEffect/block1.mp3'))
+    this.load.audio(ASSETS.BLOCK2_SFX, assetUrl('audio/SoundEffect/block2.mp3'))
 
     // Progress bar
     this.load.on('progress', (value) => {
