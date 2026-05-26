@@ -22,3 +22,6 @@ npm run dev
 - **Player 1:** Gerak menggunakan `W`/`A`/`S`/`D`. Tekan `Space` untuk menyerang.
 - **Player 2:** Gerak menggunakan panah `←`/`↑`/`→`. Tekan panah `↓` untuk menyerang.
 - Game ini juga support Game Pad! Connect kan dengan 2 gamepad untuk mabar dengan teman
+
+
+kasih star pls
