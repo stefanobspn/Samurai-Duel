@@ -28,7 +28,7 @@ export const MACK_ANIMATIONS = [
   { key: ASSETS.MACK_RUN, frames: 8, frameRate: FRAME_RATE, repeat: -1 },
   { key: ASSETS.MACK_JUMP, frames: 2, frameRate: 8, repeat: 0 },
   { key: ASSETS.MACK_FALL, frames: 2, frameRate: 8, repeat: 0 },
-  { key: ASSETS.MACK_ATTACK1, frames: 6, frameRate: FRAME_RATE, repeat: 0 },
+  { key: ASSETS.MACK_ATTACK1, frames: 6, frameRate: 18, repeat: 0 },
   { key: ASSETS.MACK_TAKEHIT, frames: 4, frameRate: FRAME_RATE, repeat: 0 },
   { key: ASSETS.MACK_DEATH, frames: 6, frameRate: FRAME_RATE, repeat: 0 }
 ]
